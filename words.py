@@ -66,7 +66,7 @@ def computer_move(w, start_player):
         len_of_w = len(w)
         try:
             all_probable_words = [i for i in all_words if i[:len_of_w] == w]
-            all_odd_words = [i for i in all_probable_words if len(i) %2 == 0]
+            all_odd_words = [i for i in all_probable_words if len(i) %2 != 0]
             all_even_words = [i for i in all_probable_words if len(i) %2 == 0]
         except:
             # no words to pick from
