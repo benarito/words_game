@@ -39,15 +39,13 @@ def check_if_chars_or_word_exists(w):
     if w in all_words:
         return True
 
-    chars_exist = False
-    for wd in all_words:
-        if w in wd:
-            chars_exist = True
-            break
-    if not chars_exist:
-        return True
+    len_of_w = len(w)
+    words_starting_with_w = [i for i in all_words if i[:len_of_w] == w]
 
-    return False
+    if not words_starting_with_w:
+        return True
+    else:
+        return False
 
 def computer_move(w, start_player):
     if len(w) == 0:
@@ -141,7 +139,6 @@ def play(start_player, num_rounds):
             else:
                 w=computer_move(w, start_player)
                 lost = check_if_chars_or_word_exists(w)
-                print 'The current letter(s) are - {}\n'.format(w)
                 if not lost:
                     w=player_move(w)
                     lost = check_if_chars_or_word_exists(w)
