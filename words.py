@@ -77,10 +77,9 @@ def computer_move(w, start_player):
         if start_player == 'Computer':
             # do odd words
             if all_odd_words:
-                # pick a random word and append its letter
+                # pick a random word and append its next letter
                 while True:
                     random_word = random.choice(all_odd_words)
-                    print random_word
                     if (len(random_word) != len_of_w + 1) and (random_word[:len_of_w+1] not in all_words):
                         break
                 random_letter = random_word[len(w)]
@@ -91,10 +90,9 @@ def computer_move(w, start_player):
         else:
             # even numbers
             if all_even_words:
-                # pick a random word and append its letter
+                # pick a random word and append its next letter
                 while True:
                     random_word = random.choice(all_even_words)
-                    print random_word
                     if (len(random_word) != len_of_w + 1) and (random_word[:len_of_w+1] not in all_words):
                         break
                 random_letter = random_word[len(w)]
@@ -136,9 +134,9 @@ def play(start_player, num_rounds):
                     w=computer_move(w, start_player)
                     lost = check_if_chars_or_word_exists(w)
                     if lost:
-                        print 'The Computer lost!!'
+                        print 'The Computer lost!!\n'
                 else:
-                    print 'You lost!!'
+                    print 'You lost!!\n'
                 print 'The current letter(s) are - {}\n'.format(w)
             else:
                 w=computer_move(w, start_player)
@@ -148,21 +146,29 @@ def play(start_player, num_rounds):
                     w=player_move(w)
                     lost = check_if_chars_or_word_exists(w)
                     if lost:
-                        print 'You lost!!'
+                        print 'You lost!!\n'
                 else:
-                    print 'The computer lost!!'
+                    print 'The computer lost!!\n'
+                print 'The current letter(s) are - {}\n'.format(w)
         count += 1
 
 
 def start():
     print 'Welcome to words game'
     print 'This is a two-player word game, in which the players take turns saying a letter.\nYou play against the computer. If a player says a letter that ends a word, that player loses.\nSimilarly, if a player says a letter from which no word can be spelled, that player loses.\n'
-    num_rounds = int(raw_input('How many rounds do you want to play: '))
+
+    while True:
+        num_rounds = raw_input('How many rounds do you want to play: ')
+        if re.match("^[1-9]*$", num_rounds) and len(num_rounds) == 1:
+            break
+        else:
+            print "The number of rounds should be an integer between 1 and 9! Please enter again!"
+
     print 'The game starts now..\n'
 
     # choose who to start randomly
     start_player = random.choice(['Computer', 'Player'])
-    play(start_player, num_rounds)
+    play(start_player, int(num_rounds))
 
 
 if __name__ == '__main__':
