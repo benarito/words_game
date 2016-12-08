@@ -30,7 +30,7 @@ def load_words():
                 odd_words.append(word)
     return odd_words, even_words, all_words
 
-# separate the words into: words with 1. odd number of characters, even number of characters, full list
+# separate the words into: words with 1. odd number of characters, 2. even number of characters, 3. full list
 odd_words, even_words, all_words = load_words()
 
 
@@ -49,17 +49,60 @@ def check_if_chars_or_word_exists(w):
 
     return False
 
-def computer_move(w):
+def computer_move(w, start_player):
     if len(w) == 0:
         # the computer is starting first
-        # choose a random first letter in odd words
+        # choose a random first letter in odd numbered words
         odd_word = random.choice(odd_words)
         random_letter = odd_word[0]
     else:
-        # the char list has some words
-        # choose a word with odd left characters
-        # TODO complete this
-        random_letter = 'o'
+        '''
+        strategy
+        - who started? If player started - computer should do an even number  else do an odd number
+        - categorize all the words left into odd number words and even number words
+        - choose one and add the next character
+        - sure way of winning!!
+        '''
+        len_of_w = len(w)
+        try:
+            all_probable_words = [i for i in all_words if i[:len_of_w] == w]
+            all_odd_words = [i for i in all_probable_words if len(i) %2 == 0]
+            all_even_words = [i for i in all_probable_words if len(i) %2 == 0]
+        except:
+            # no words to pick from
+            all_probable_words = []
+            all_odd_words = []
+            all_even_words = []
+
+        if start_player == 'Computer':
+            # do odd words
+            if all_odd_words:
+                # pick a random word and append its letter
+                while True:
+                    random_word = random.choice(all_odd_words)
+                    print random_word
+                    if (len(random_word) != len_of_w + 1) and (random_word[:len_of_w+1] not in all_words):
+                        break
+                random_letter = random_word[len(w)]
+            else:
+                # pick from other probable words that are not odd
+                random_word = random.choice(all_probable_words)
+                random_letter = random_word[len(w)]
+        else:
+            # even numbers
+            if all_even_words:
+                # pick a random word and append its letter
+                while True:
+                    random_word = random.choice(all_even_words)
+                    print random_word
+                    if (len(random_word) != len_of_w + 1) and (random_word[:len_of_w+1] not in all_words):
+                        break
+                random_letter = random_word[len(w)]
+            else:
+                # pick from other probable words that are not odd
+                random_word = random.choice(all_probable_words)
+                random_letter = random_word[len(w)]
+
     w += random_letter
     print 'Computer addded letter - {}\n'.format(random_letter)
     return w
@@ -90,7 +133,7 @@ def play(start_player, num_rounds):
                 w=player_move(w)
                 lost = check_if_chars_or_word_exists(w)
                 if not lost:
-                    w=computer_move(w)
+                    w=computer_move(w, start_player)
                     lost = check_if_chars_or_word_exists(w)
                     if lost:
                         print 'The Computer lost!!'
@@ -98,7 +141,7 @@ def play(start_player, num_rounds):
                     print 'You lost!!'
                 print 'The current letter(s) are - {}\n'.format(w)
             else:
-                w=computer_move(w)
+                w=computer_move(w, start_player)
                 lost = check_if_chars_or_word_exists(w)
                 print 'The current letter(s) are - {}\n'.format(w)
                 if not lost:
