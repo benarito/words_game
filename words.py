@@ -37,12 +37,14 @@ odd_words, even_words, all_words = load_words()
 def check_if_chars_or_word_exists(w):
     '''check if the current characters list exist in the words'''
     if w in all_words:
+        print 'There is a word with the current characters!\n'
         return True
 
     len_of_w = len(w)
     words_starting_with_w = [i for i in all_words if i[:len_of_w] == w]
 
     if not words_starting_with_w:
+        print 'There is no words with the current characters!\n'
         return True
     else:
         return False
@@ -73,27 +75,33 @@ def computer_move(w, start_player):
             all_even_words = []
 
         if start_player == 'Computer':
-            # do odd words
+            # do odd lettered words
             if all_odd_words:
+                # loop through all odd words and see the best fit
+                best_words = [i for i in all_odd_words if (len(i) != len_of_w + 1) and (i[:len_of_w+1] not in all_words)]
                 # pick a random word and append its next letter
-                while True:
+                if best_words:
+                    random_word = random.choice(best_words)
+                    random_letter = random_word[len(w)]
+                else:
                     random_word = random.choice(all_odd_words)
-                    if (len(random_word) != len_of_w + 1) and (random_word[:len_of_w+1] not in all_words):
-                        break
-                random_letter = random_word[len(w)]
+                    random_letter = random_word[len(w)]
             else:
                 # pick from other probable words that are not odd
                 random_word = random.choice(all_probable_words)
                 random_letter = random_word[len(w)]
         else:
-            # even numbers
+            # do even lettered words
             if all_even_words:
+                # loop through all even words and see the best fit
+                best_words = [i for i in all_even_words if (len(i) != len_of_w + 1) and (i[:len_of_w+1] not in all_words)]
                 # pick a random word and append its next letter
-                while True:
+                if best_words:
+                    random_word = random.choice(best_words)
+                    random_letter = random_word[len(w)]
+                else:
                     random_word = random.choice(all_even_words)
-                    if (len(random_word) != len_of_w + 1) and (random_word[:len_of_w+1] not in all_words):
-                        break
-                random_letter = random_word[len(w)]
+                    random_letter = random_word[len(w)]
             else:
                 # pick from other probable words that are not odd
                 random_word = random.choice(all_probable_words)
@@ -138,6 +146,7 @@ def play(start_player, num_rounds):
                 print 'The current letter(s) are - {}\n'.format(w)
             else:
                 w=computer_move(w, start_player)
+                print 'The current letter(s) are - {}\n'.format(w)
                 lost = check_if_chars_or_word_exists(w)
                 if not lost:
                     w=player_move(w)
