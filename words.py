@@ -1,7 +1,5 @@
 import random
-import string
 import re
-import sys
 
 '''
 A simple word game
